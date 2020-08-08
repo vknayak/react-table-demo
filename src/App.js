@@ -7,14 +7,19 @@ import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
-import withWidth from '@material-ui/core/withWidth';
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+// import withWidth from '@material-ui/core/withWidth';
+import { useTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+
 // import './App.css';
 import columns from './TableData';
 
 
 function App(props) {
-
+  
+  // useMediaquery as to standardize code
+  const theme = useTheme();
+  const WidthMatches = useMediaQuery(theme.breakpoints.up('sm'));
   // gets data from makeData Function like api call
   let data = React.useMemo(() => makeData(100), [])
 
@@ -161,9 +166,9 @@ function App(props) {
 
       </Grid>
       {
-        props.width !== 'xs'  ?
-        <Table columns={finalData} data={DataWithSearchableText} width={props.width}/>
-        : <Table columns={columns} data={DataWithSearchableText} width={props.width}/>
+        WidthMatches ?
+        <Table columns={finalData} data={DataWithSearchableText} WidthMatches={WidthMatches}/>
+        : <Table columns={columns} data={DataWithSearchableText} WidthMatches={WidthMatches}/>
       }
       
       </Paper>
@@ -172,5 +177,5 @@ function App(props) {
   )
 }
 
-export default withWidth()(App)
+export default App;
 

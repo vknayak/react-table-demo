@@ -16,8 +16,8 @@ import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 
 export default function Tables(props) {
-  const { columns, data, width }= props;
-  console.log(width, 'width from withWidth');
+  const { columns, data, WidthMatches }= props;
+  console.log(WidthMatches, 'width from withWidth');
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -80,7 +80,7 @@ export default function Tables(props) {
     <TableContainer style={{height: 400}}>
 
     {
-      width !== 'xs' ?
+      WidthMatches ?
       <Table {...getTableProps()} stickyHeader  aria-label="sticky table">
         <TableHead>
           {headerGroups.map(headerGroup => (
