@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React from "react";
 import { useTable, useFilters, useSortBy, usePagination } from "react-table";
 import Table from '@material-ui/core/Table';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -7,8 +7,16 @@ import TableCell from '@material-ui/core/TableCell'
 import TableHead from '@material-ui/core/TableHead'
 import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
-export default function Tables({ columns, data }) {
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardHeader from '@material-ui/core/CardHeader';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+export default function Tables({ columns, data, width }) {
 
+  // console.log(columns, 'width from table');
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -68,8 +76,11 @@ export default function Tables({ columns, data }) {
   // Render the UI for your table
   return (
 
-    <TableContainer>
-      <Table {...getTableProps()}>
+    <TableContainer style={{height: 400}}>
+
+    {
+      width>500 ?
+      <Table {...getTableProps()} stickyHeader  aria-label="sticky table">
         <TableHead>
           {headerGroups.map(headerGroup => (
             <TableRow {...headerGroup.getHeaderGroupProps()}>
@@ -118,6 +129,50 @@ export default function Tables({ columns, data }) {
           })}
         </TableBody>
       </Table>
+
+      :
+ 
+        <>
+          {page.map((row, i) => {
+            prepareRow(row);
+            {/* console.log(row.cells, 'valllll'); */}
+            return (
+              <Card  {...getTableProps()} variant="outlined" style={{margin:20}} key={i}>
+                  
+              <CardContent {...getTableBodyProps()}>
+                    <span {...row.getRowProps()}>
+                      {row.cells.map(cell => {
+                        console.log(cell.column.priority,cell.value, 'priority')
+                      return(
+                          <>
+                          {cell.column.priority === 2 || cell.column.priority === 3 || cell.column.priority === 4 || 
+                            cell.column.priority  === 5 || cell.column.priority === 6? 
+                            <div style={{marginLeft:20}}>
+                                {cell.column.Header} : {cell.value}
+                            </div>
+                           : cell.column.priority === 1 ? 
+                           <>
+                           <CardHeader avatar ={
+                            <Avatar>K</Avatar>
+                           }
+                           titleTypographyProps={{variant:'h5' }}
+                           title={cell.value}
+                          />
+                          </> : ''
+                        
+                          }
+
+                          </>
+                      )
+                      })}
+                    </span>
+                    </CardContent>
+              </Card>
+            );
+          })}
+          </>
+     
+    }
       <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"

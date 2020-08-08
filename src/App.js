@@ -36,7 +36,7 @@ function App() {
 
   // called my createSearchableText here and memoized dependent is data when data is changed it will call agian
   let DataWithSearchableText = React.useMemo(() => createSearchableText(data), [data]) ;
-  // console.log(DataWithSearchableText, 'newww');
+  console.log(DataWithSearchableText, 'newww');
 
   // state for seach box
   const [search, setSearch] = useState('')
@@ -58,32 +58,34 @@ function App() {
     }
     
   // table columns showing methods on basis of screenSize
+
   function getWindowDimensions() {
-    const screenSize = window.screen.width;
     const { innerWidth: width, innerHeight: height } = window;
     return {
       width,
-      height,
-      screenSize,
+      height
     };
   }
+
 
   function useWindowDimensions() {
     const [windowDimensions, setWindowDimensions] = useState(
       getWindowDimensions()
     );
-
-
+  
     useEffect(() => {
       function handleResize() {
         setWindowDimensions(getWindowDimensions());
       }
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }, [search, data]);
-
+  
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }, []);
+  
     return windowDimensions;
   }
+
+  const { height, width } = useWindowDimensions();
 
   // sets data in priprity order
   function GetData() {
@@ -101,13 +103,14 @@ function App() {
     
   }
 
-  const { screenSize } = useWindowDimensions();
+  // priorotizedColumns is the data which forwarded to cards so it can show on prority order
+  const priorotizedColumns =GetData();
 
   // get the data od columns that I need  to show
   function name() {
     const finallist = [];
     let calculation = 0;
-    const SizeOfTable=screenSize-32;
+    const SizeOfTable=width-32;
     // console.log(screenSize, 'size of window');
     // console.log(SizeOfTable, 'size f table');
     for (const i of GetData()) {
@@ -137,10 +140,10 @@ function App() {
     <Container xs={12}  style={{marginTop:20}}>
       <Paper elevation={3}>
       <Grid container>
-          <Grid item xs={9}>
+          <Grid item xs={8}>
               <h1 style={{marginLeft:15}}>React-Table</h1>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={2}>
           
             <TextField
                     defaultValue={search}
@@ -153,8 +156,12 @@ function App() {
           </Grid>
 
       </Grid>
-    
-      <Table columns={finalData} data={DataWithSearchableText} />
+      {
+        width >500 ?
+        <Table columns={finalData} data={DataWithSearchableText} width={width}/>
+        : <Table columns={columns} data={DataWithSearchableText} width={width}/>
+      }
+      
       </Paper>
     </Container>
     </>
