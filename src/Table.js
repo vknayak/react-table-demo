@@ -14,9 +14,10 @@ import CardHeader from '@material-ui/core/CardHeader';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-export default function Tables({ columns, data, width }) {
 
-  // console.log(columns, 'width from table');
+export default function Tables(props) {
+  const { columns, data, width }= props;
+  console.log(width, 'width from withWidth');
   // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
@@ -79,7 +80,7 @@ export default function Tables({ columns, data, width }) {
     <TableContainer style={{height: 400}}>
 
     {
-      width>500 ?
+      width !== 'xs' ?
       <Table {...getTableProps()} stickyHeader  aria-label="sticky table">
         <TableHead>
           {headerGroups.map(headerGroup => (
@@ -137,9 +138,8 @@ export default function Tables({ columns, data, width }) {
             prepareRow(row);
             {/* console.log(row.cells, 'valllll'); */}
             return (
-              <Card  {...getTableProps()} variant="outlined" style={{margin:20}} key={i}>
-                  
-              <CardContent {...getTableBodyProps()}>
+              <Card  {...getTableProps()} variant="outlined" style={{margin:20}} key={i}> 
+                <CardContent {...getTableBodyProps()}  key={i}>
                     <span {...row.getRowProps()}>
                       {row.cells.map(cell => {
                         console.log(cell.column.priority,cell.value, 'priority')
@@ -161,7 +161,6 @@ export default function Tables({ columns, data, width }) {
                           </> : ''
                         
                           }
-
                           </>
                       )
                       })}

@@ -7,9 +7,13 @@ import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Grid from '@material-ui/core/Grid';
+import withWidth from '@material-ui/core/withWidth';
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 // import './App.css';
 import columns from './TableData';
-function App() {
+
+
+function App(props) {
 
   // gets data from makeData Function like api call
   let data = React.useMemo(() => makeData(100), [])
@@ -157,9 +161,9 @@ function App() {
 
       </Grid>
       {
-        width >500 ?
-        <Table columns={finalData} data={DataWithSearchableText} width={width}/>
-        : <Table columns={columns} data={DataWithSearchableText} width={width}/>
+        props.width !== 'xs'  ?
+        <Table columns={finalData} data={DataWithSearchableText} width={props.width}/>
+        : <Table columns={columns} data={DataWithSearchableText} width={props.width}/>
       }
       
       </Paper>
@@ -168,5 +172,5 @@ function App() {
   )
 }
 
-export default App
+export default withWidth()(App)
 
